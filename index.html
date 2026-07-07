@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)https://binik17.github.io/Sayo_Streaming/ -->
+<html lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Sayo_Streaming | Streaming graphics to SayoDevice O3C</title>
+<meta name="generator" content="Jekyll v3.10.0">
+<meta property="og:title" content="Sayo_Streaming">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Streaming graphics to SayoDevice O3C">
+<meta property="og:description" content="Streaming graphics to SayoDevice O3C">
+<link rel="canonical" href="https://binik17.github.io/Sayo_Streaming/">
+<meta property="og:url" content="https://binik17.github.io/Sayo_Streaming/">
+<meta property="og:site_name" content="Sayo_Streaming">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Sayo_Streaming">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"Streaming graphics to SayoDevice O3C","headline":"Sayo_Streaming","name":"Sayo_Streaming","url":"https://binik17.github.io/Sayo_Streaming/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="./Sayo_Streaming _ Streaming graphics to SayoDevice O3C_files/style.css">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/Sayo_Streaming/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  <link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
+  <meta name="google-site-verification" content="Lbh7q0DAp_RpCh3qSfh-o_R_Hd6zaH9BoyvW3R9u2aw" /></head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+
+      <h1 id="sayo_streaming">Sayo_Streaming</h1>
+<p>Streaming graphics to SayoDevice O3C for linux distros</p>
+
+<h1 id="dependencies">Dependencies</h1>
+<ul>
+  <li>libusb-1.0</li>
+  <li>ffmpeg</li>
+</ul>
+
+<h1 id="install">Install</h1>
+<p><a href="https://github.com/binik17/Sayo_Streaming/releases/tag/1.0">Releases</a></p>
+
+<p>Or compile</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/binik17/Sayo_Streaming &amp;&amp; cd Sayo_Streaming
+gcc sayo_stream.c -o sayo_streaming -lusb-1.0 -O3
+</code></pre></div></div>
+
+<h1 id="usage">Usage</h1>
+<p>Sayo_streaming uses /dev/video50 as a source. You can create a virtual camera using v4l2loopback and OBS</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo modprobe v4l2loopback video_nr=50 card_label="OBS Virtual Camera" exclusive_caps=1
+# Simply start OBS vurtual camera and run sayo_streaming
+</code></pre></div></div>
+
+
+      
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="https://github.com/binik17/Sayo_Streaming/edit/main/README.md">Improve this page</a>.
+      </div>
+      
+    </div>
+    <script src="./Sayo_Streaming _ Streaming graphics to SayoDevice O3C_files/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  
+
+</body></html>
