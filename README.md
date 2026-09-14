@@ -15,7 +15,14 @@ gcc sayo_stream.c -o sayo_streaming -lusb-1.0 -O3
 ```
 
 # Usage
-Sayo_streaming uses /dev/video50 as a source. You can create a virtual camera using v4l2loopback and OBS
+```
+Options:
+  -p <path>  Stream directly from a video file (e.g., mp4, avi)
+  -h         Show this help message and exit
+
+If no options are provided, the program streams from /dev/video50 by default.
+```
+You can create a virtual camera using v4l2loopback and OBS
 ```
 sudo modprobe v4l2loopback video_nr=50 card_label="OBS Virtual Camera" exclusive_caps=1
 # Simply start OBS vurtual camera and run sayo_streaming
