@@ -25,20 +25,8 @@ libusb_context *global_ctx = NULL;
 void clean_on_ex(int signum) {
     printf("\nCTRL C clean \n");
 
-    if (global_ffmpeg_pipe != NULL) {
-        pclose(global_ffmpeg_pipe);
-    }
-
-    system("pkill -9 -f 'ffmpeg.*rawvideo'");
-    system("pkill -9 -f 'ffmpeg.*video50'");
-
-    if (global_dev_handle != NULL) {
-        libusb_release_interface(global_dev_handle, 1);
-        libusb_attach_kernel_driver(global_dev_handle, 1);
-        libusb_close(global_dev_handle);
-    }
-
-    _Exit(0);
+    
+    kill(0, SIGKILL); 
 }
 
 void* video_receiver_thread(void* arg) {
