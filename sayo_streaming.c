@@ -68,24 +68,33 @@ int main(int argc, char *argv[]) {
 
     int actual_len;
     char *vid = NULL;
+    char arg[17];
+    int has_p = 0;
+    int has_l = 0;
     int opt;
-    while ((opt = getopt(argc, argv, "p:h")) != -1) {
+    while ((opt = getopt(argc, argv, "p:lh")) != -1) {
         if (opt == 'p') {
             vid = optarg;
+            has_p = 1;
         }
         else if(opt == 'h'){
             printf("Usage: %s [OPTIONS]\n\n", argv[0]);
             printf("Options:\n");
-            printf("  -p <path>  Stream directly from a video file (e.g., mp4, avi)\n");
+            printf("  -p <path>  Stream directly from a file (e.g., mp4, avi, gif, png, jpg)\n");
+            printf("  -l         Loop the video\n");
             printf("  -h         Show this help message and exit\n\n");
             printf("If no options are provided, the program streams from /dev/video50 by default.\n");
             return 0;
+        }
+        else if(opt == 'l') {
+            strcpy(arg, "-stream_loop -1");
+            has_l = 1; 
         }
         else {
             return 1;
         }
     }
-
+    
     if (libusb_init(&global_ctx) < 0) return 1;
     global_dev_handle = libusb_open_device_with_vid_pid(global_ctx, VID, PID);
     if (!global_dev_handle) {
@@ -100,12 +109,23 @@ int main(int argc, char *argv[]) {
     libusb_claim_interface(global_dev_handle, 1);
 
     char command_buff[512];
+    if (has_l == 1 && has_p == 0) {
+        printf("Cannot loop video (-l) because no input file was specified (-p). \n");
+        return 1;
+    }
     if (vid != NULL) {
-        snprintf(command_buff, sizeof(command_buff), 
-                 "ffmpeg -re -i %s -vf \"scale=160:80\" -f rawvideo -pix_fmt rgb24 pipe:1 2>/dev/null", vid);
+        char last_s[4];
+        strcpy(last_s, vid + strlen(vid) - 3);
+        if(strcmp(last_s, ".mp4") || strcmp(last_s, ".avi") || strcmp(last_s, ".gif"))
+            snprintf(command_buff, sizeof(command_buff), "ffmpeg %s -re -i %s -vf \"scale=160:80\" -f rawvideo -pix_fmt rgb24 pipe:1 2>/dev/null", arg, vid);
+        else if (strcmp(last_s, ".png") || strcmp(last_s, ".jpg"))
+            snprintf(command_buff, sizeof(command_buff), "ffmpeg -i %s -vf \"scale=160:80\" -f rawvideo -pix_fmt rgb24 pipe:1 2>/dev/null", vid);
+        else{
+            printf("supports only .mp4, .avi, .gif, .png, .jpg");
+            return 1;
+        }
     } else {
-        snprintf(command_buff, sizeof(command_buff), 
-                 "ffmpeg -fflags nobuffer -flags low_delay -f v4l2 -i /dev/video50 -vf \"scale=160:80\" -f rawvideo -pix_fmt rgb24 pipe:1 2>/dev/null");
+        snprintf(command_buff, sizeof(command_buff), "ffmpeg -fflags nobuffer -flags low_delay -f v4l2 -i /dev/video50 -vf \"scale=160:80\" -f rawvideo -pix_fmt rgb24 pipe:1 2>/dev/null");
     }
 
     global_ffmpeg_pipe = popen(command_buff, "r");
@@ -172,7 +192,11 @@ int main(int argc, char *argv[]) {
         pack1024[3] = (hash_init >> 8) & 0xFF; 
         
         libusb_bulk_transfer(global_dev_handle, EP_OUT, pack1024, 1024, &actual_len, 1000);
+        //usleep(1000); 
 
+        // streaming 
+        // 0x3E: 22 04 65 04 05 00 3E 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00
+        // 0x25: 22 04 24 62 FC 03 25 00 00 00 00 00 E3 18 E3 18 E3 18 E3 18 E3 18 E3 18
         for (int offset = 0; offset < sizeof(rgb565); offset += 1012) {
             int chunk = (sizeof(rgb565) - offset) > 1012 ? 1012 : (sizeof(rgb565) - offset);
             memset(pack1024, 0, 1024);
