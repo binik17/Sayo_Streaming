@@ -17,7 +17,8 @@ gcc sayo_stream.c -o sayo_streaming -lusb-1.0 -O3
 # Usage
 ```
 Options:
-  -p <path>  Stream directly from a video file (e.g., mp4, avi)
+  -p <path>  Stream directly from a video file (e.g., mp4, avi, gif, png, jpg)
+  -l         Loop the video
   -h         Show this help message and exit
 
 If no options are provided, the program streams from /dev/video50 by default.
